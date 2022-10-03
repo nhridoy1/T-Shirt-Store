@@ -33,10 +33,12 @@ app.use(morgan('tiny'))
 // import all routes here
 const user = require('./routes/user')
 const product = require('./routes/product')
+const payment = require('./routes/payment')
 
 // router middleware
 app.use('/api/v1', user)
 app.use('/api/v1', product)
+app.use('/api/v1', payment)
 
 // testing signup
 app.use('/signup', (req, res) => {

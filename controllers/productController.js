@@ -1,7 +1,6 @@
 const Product = require('../models/product')
 const { BigPromise } = require('../middlewares/bigPromise')
 const cloudinary = require('cloudinary').v2
-const CustomError = require('../utils/customError')
 const WhereClause = require('../utils/whereClause')
 
 
@@ -62,10 +61,79 @@ exports.oneProduct = BigPromise(async (req, res, next) => {
 })
 
 exports.addReview = BigPromise(async (req, res, next) => {
-
+    const { rating, comment, productId } = req.body
     
+    const review = {
+        user: req.user._id,
+        name: req.user.name,
+        rating: Number(rating),
+        comment,
+    }
+
+    const product = await Product.findById(productId)
+
+    const isReviewed = product.reviews.find((review) => {
+        review.user.toString() == req.user._id.toString() ? true : false
+    })   
+
+    if (isReviewed) {
+        product.reviews.forEach(review => {
+            if (review.user.toString() === req.user._id.toString()) {
+                review.comment = comment
+                review.rating = rating
+            }
+        })
+    } else {
+        product.reviews.push(review)
+        product.numberOfReviews = product.reviews.length
+    }
+
+    // adjust ratings
+    product.ratings = product.reviews.reduce((acc, item) => {
+        (item.rating + acc, 0) / product.reviews.length
+    })
+
+    // save 
+    await product.save({ validateBeforeSave: false })
+
+    res.status(200).json({ success: true })
 })
 
+exports.deleteReview = BigPromise(async (req, res, next) => {
+    const { productId } = req.query
+
+    const product = await Product.findById(productId)
+
+    const reviews = product.reviews.filter(
+        (review) => review.user.toString() === req.user._id.toString()
+    )
+
+    const numberOfReviews = reviews.length
+
+    // adjust ratings
+    product.ratings = product.reviews.reduce((acc, item) => {
+        (item.rating + acc, 0) / product.reviews.length
+    })
+
+    // update the product
+    await Product.findByIdAndUpdate(productId, {
+        reviews,
+        numberOfReviews,
+        ratings
+    }, {
+        new: true,
+        runValidators: true
+    })
+    
+    res.status(200).json({ success: true })
+
+})
+
+exports.getOnlyReviewsForOneProduct = BigPromise(async (req, res, next) => {
+    const product = await Product.findById(req.query.productId)
+
+    res.status(200).json({success: true, reviews: product.reviews })
+})
 
 // only admin controllers
 exports.allProductsAdmin = BigPromise(async (req, res, next) => {
