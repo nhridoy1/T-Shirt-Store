@@ -37,7 +37,6 @@ exports.allProducts = BigPromise(async (req, res, next) => {
 
     const filteredProductCount =  products.length 
 
-    console.log(productsObj);
     productsObj.pagination(resultPerPage)
 
     products = await productsObj.base.clone()
