@@ -47,7 +47,7 @@ const productSchema = new mongoose.Schema({
     },
     stock: {
         type: Number,
-        required: true
+        required: [true, 'how many stock do you have.provide that']
     },
     ratings: {
         type: Number,

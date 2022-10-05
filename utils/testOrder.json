@@ -1,0 +1,25 @@
+{
+    "shippingInfo": {
+        "address": "Faidabad kathaltola",
+        "city": "Dhaka",
+        "phoneNumber": "017575544",
+        "postalCode": "1230",
+        "state": "Rajasthan",
+        "country": "Bangladesh"
+    },
+    "orderItems": [
+        {
+            "name": "Pro coder t-shirt",
+            "quantity": "1",
+            "image": "https://res.cloudinary.com/ridoycloudimage/image/upload/v1664720007/productphotos/fibtx4e4njpoqtlxqch6.png",
+            "price": "299",
+            "product": "63391c2161744a5ad8532cb7"
+        }
+    ],
+    "paymentInfo": {
+        "id": "testString"
+    }, 
+    "taxAmount": "20",
+    "shippingAmount": "60",
+    "totalAmount": "400"
+}
