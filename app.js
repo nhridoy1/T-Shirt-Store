@@ -47,6 +47,9 @@ app.use('/api/v1', order)
 app.use('/signup', (req, res) => {
     res.render('signup')
 })
+app.use('/api/v1', (req, res, next) => {
+    res.status(200).json({success: true, msg: 'Hello From Pro_backend_developer'})
+})
 
 // export app js
 module.exports = app
