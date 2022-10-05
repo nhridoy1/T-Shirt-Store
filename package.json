@@ -4,7 +4,7 @@
   "description": "a backend api for t-shirt store",
   "main": "index.js",
   "scripts": {
-    "build:prod": "node index.js",
+    "start": "node index.js",
     "build:dev": "nodemon index.js"
   },
   "keywords": [
